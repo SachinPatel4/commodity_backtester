@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from config import DEFAULT_START, EIA_SERIES
+from src.config import DEFAULT_START, EIA_SERIES
 from src.data.eia_client import EIAClient
 
 

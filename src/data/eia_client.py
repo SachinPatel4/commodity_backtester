@@ -7,7 +7,7 @@ from typing import Any
 import pandas as pd
 import requests
 
-from src.config import EIA_API_KEY, EIA_BASE_URL
+from config import EIA_API_KEY, EIA_BASE_URL
 
 
 class EIAError(RuntimeError):

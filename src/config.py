@@ -9,7 +9,8 @@ DATA_DIR: Path = ROOT_DIR / "data"
 DB_PATH: Path = DATA_DIR / "commodities.db"
 DATA_DIR.mkdir(exist_ok=True)
 
-# Get a free key at https://www.eia.gov/opendata/  then:  export EIA_API_KEY="..."
+# Get a free key at https://www.eia.gov/opendata/  then:  
+export EIA_API_KEY="shh5wMAujY3sh2pFaTmG2JulIPUS7bBrQ8U74JZb"
 EIA_API_KEY: str = os.environ.get("EIA_API_KEY", "")
 EIA_BASE_URL: str = "https://api.eia.gov/v2"
 

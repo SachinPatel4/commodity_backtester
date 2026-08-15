@@ -1,19 +1,6 @@
-# Private API keys and environment variables
-.env
-
-# Python virtual environment
-.venv/
-
-# Python cache files
 __pycache__/
-*.py[cod]
-
-# Local database and downloaded raw data
+*.pyc
 data/*.db
-data/raw/
-
-# Notebook temporary files
-.ipynb_checkpoints/
-
-# macOS temporary file
-.DS_Store
+data/*.png
+.env
+.venv/

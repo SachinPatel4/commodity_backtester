@@ -4,7 +4,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-ROOT_DIR: Path = Path(__file__).resolve().parent
+ROOT_DIR: Path = Path(__file__).resolve().parents[1]
 DATA_DIR: Path = ROOT_DIR / "data"
 DB_PATH: Path = DATA_DIR / "commodities.db"
 DATA_DIR.mkdir(exist_ok=True)

@@ -24,12 +24,22 @@ def crack_spread_321(
     return ((2.0 * gas_bbl + ho_bbl - 3.0 * crude) / 3.0).rename("crack_321")
 
 
-def term_structure_slope(front: pd.Series, deferred: pd.Series) -> pd.Series:
-    """Curve slope ``(deferred - front) / front``.
+def term_structure_slope(
+    front: pd.Series, deferred: pd.Series, min_front: float = 1.0
+) -> pd.Series:
+    """Curve slope ``(deferred - front) / front``, guarded for bad fronts.
 
-    Positive => contango (carry cost); negative => backwardation.
+    Days where the front price is non-positive or below ``min_front`` (e.g.
+    the −$37 WTI settle on 20 Apr 2020) are masked to NaN, since the ratio
+    is undefined/explosive there. Positive => contango; negative => backwardation.
     """
-    return ((deferred - front) / front).rename("term_slope")
+    front_valid = front.where(front > min_front)
+    return ((deferred - front_valid) / front_valid).rename("term_slope")
+
+
+def dollar_spread(front: pd.Series, deferred: pd.Series) -> pd.Series:
+    """Absolute calendar spread ``deferred - front`` in $/bbl (robust to sign)."""
+    return (deferred - front).rename("dollar_spread")
 
 
 def market_state(slope: pd.Series, flat_band: float = 0.001) -> pd.Series:

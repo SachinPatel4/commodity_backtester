@@ -176,7 +176,7 @@ class Database:
             params={"sym": symbol, "w": window - 1}, parse_dates=["date"],
         )
 
-        def trade_summary(self, run_id: int) -> pd.DataFrame:
+            def trade_summary(self, run_id: int) -> pd.DataFrame:
         """Per-symbol trade stats in dollars (GROUP BY + conditional aggregation)."""
         query = """
             SELECT symbol,

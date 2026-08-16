@@ -31,13 +31,20 @@ def main() -> None:
     # 3. Backtests
     bt = Backtester(commission=0.0003, risk=RiskParams(stop_loss=0.08))
 
+       # Trend on outright WTI: multiplicative returns + volatility targeting
     wti = prices[["WTI"]].rename(columns={"WTI": "close"}).dropna()
     wti.attrs["symbol"] = "WTI"
-    trend = bt.run(wti, SmaCrossStrategy(fast=20, slow=60))
+    bt_outright = Backtester(pnl_mode="returns", vol_target=0.15, commission=0.0003,
+                             risk=RiskParams(stop_loss=0.15, take_profit=None))
+    trend = bt_outright.run(wti, SmaCrossStrategy(fast=20, slow=60))
 
+    # Mean reversion on the CRACK SPREAD: additive $ PnL + volatility targeting
     crack_df = crack.to_frame("close")
     crack_df.attrs["symbol"] = "CRACK321"
-    reversion = bt.run(crack_df, MeanReversionZScore(window=20, entry=1.5))
+    bt_spread = Backtester(pnl_mode="spread", vol_target=0.15, commission=0.0003,
+                           contract_size=1000.0,
+                           risk=RiskParams(stop_loss=0.15, take_profit=None))
+    reversion = bt_spread.run(crack_df, MeanReversionZScore(window=20, entry=1.5))
 
     # 4. Persist results and query them back with SQL
     with Database() as db:

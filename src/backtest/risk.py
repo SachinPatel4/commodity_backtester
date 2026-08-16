@@ -9,16 +9,18 @@ import pandas as pd
 
 @dataclass
 class RiskParams:
-    """Risk-management parameters.
+    """Risk-management parameters (dollar-based, mode-agnostic).
 
     Attributes:
-        stop_loss: Stop distance as fraction of entry price.
-        take_profit: Target distance as fraction of entry price.
-        max_leverage: Cap on absolute exposure relative to equity.
+        stop_loss: Cut a trade when its mark-to-market loss exceeds this
+            fraction of initial capital (e.g. 0.10 = -10%). None disables.
+        take_profit: Close a trade at this profit fraction of initial capital.
+            None disables (sensible for trend-following).
+        max_leverage: Cap on absolute exposure (weight) in returns mode.
     """
 
-    stop_loss: float = 0.07
-    take_profit: float = 0.15
+    stop_loss: float | None = 0.10
+    take_profit: float | None = None
     max_leverage: float = 1.0
 
 

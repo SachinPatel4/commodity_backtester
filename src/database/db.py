@@ -9,7 +9,7 @@ from typing import Any
 
 import pandas as pd
 
-from src.config import DB_PATH
+from config import DB_PATH
 from src.database.schema import SCHEMA_SQL
 
 

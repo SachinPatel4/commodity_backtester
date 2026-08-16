@@ -59,7 +59,8 @@ def main() -> None:
         print(db.rolling_stats_sql("WTI", window=20).tail().to_string(index=False))
 
     # 5. Report
-    plots.plot_equity(trend, path="data/equity_wti_trend.png")
+    plots.plot_equity(trend, path="data/equity_wti_trend.png")       # SMA (Sharpe 0.049)
+    plots.plot_equity(reversion, path="data/equity_crack_zscore.png")  # crack (Sharpe 0.906)
     plots.plot_term_structure(slope, path="data/term_structure.png")
     plots.plot_seasonality(seasonality, path="data/gas_seasonality.png")
     print("\nCharts saved to data/. Done.")

@@ -176,19 +176,19 @@ class Database:
             params={"sym": symbol, "w": window - 1}, parse_dates=["date"],
         )
 
-    def trade_summary(self, run_id: int) -> pd.DataFrame:
-        """Per-symbol trade stats (GROUP BY + conditional aggregation)."""
+        def trade_summary(self, run_id: int) -> pd.DataFrame:
+        """Per-symbol trade stats in dollars (GROUP BY + conditional aggregation)."""
         query = """
             SELECT symbol,
                    COUNT(*)                                 AS n_trades,
                    SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END) AS wins,
-                   ROUND(AVG(pnl) * 100, 3)                 AS avg_pnl_pct,
-                   ROUND(SUM(pnl) * 100, 3)                 AS total_pnl_pct,
+                   ROUND(AVG(pnl), 2)                       AS avg_pnl_gbp,
+                   ROUND(SUM(pnl), 2)                       AS total_pnl_gbp,
                    ROUND(100.0 * SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END)
                          / COUNT(*), 1)                     AS win_rate_pct
             FROM trades
             WHERE run_id = ?
             GROUP BY symbol
-            ORDER BY total_pnl_pct DESC;
+            ORDER BY total_pnl_gbp DESC;
         """
         return pd.read_sql_query(query, self._c(), params=(run_id,))

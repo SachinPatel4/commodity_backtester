@@ -21,7 +21,9 @@ def plot_equity(result: BacktestResult, path: Path | None = None) -> plt.Figure:
                  f"MaxDD {result.metrics['max_drawdown']:.1%})")
     a1.set_ylabel("Equity"); a1.grid(alpha=0.3)
     dd = result.equity / result.equity.cummax() - 1.0
+    a2.plot(dd.index, dd.values, color="crimson", lw=0.8)          # add the line
     a2.fill_between(dd.index, dd.values, 0, color="crimson", alpha=0.4)
+    a2.set_ylim(dd.min() * 1.1, 0.01)                               # force the range
     a2.set_ylabel("Drawdown"); a2.grid(alpha=0.3)
     fig.tight_layout()
     if path:

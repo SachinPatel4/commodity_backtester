@@ -15,18 +15,20 @@ def plot_equity(result: BacktestResult, path: Path | None = None) -> plt.Figure:
         2, 1, figsize=(11, 7), sharex=True,
         gridspec_kw={"height_ratios": [3, 1]},
     )
-    result.equity.plot(ax=a1, color="navy", lw=1.3)
+    eq = result.equity
+    # Use matplotlib (NOT eq.plot) so both panels share the same date units.
+    a1.plot(eq.index, eq.to_numpy(), color="navy", lw=1.3)
     a1.set_title(f"Equity curve — {result.strategy} "
                  f"(Sharpe {result.metrics['sharpe']}, "
                  f"MaxDD {result.metrics['max_drawdown']:.1%})")
     a1.set_ylabel("Equity"); a1.grid(alpha=0.3)
-    dd = result.equity / result.equity.cummax() - 1.0
-    x = dd.index.to_numpy()
-    y = dd.to_numpy(dtype="float64")
-    a2.plot(x, y, color="crimson", lw=0.8)
-    a2.fill_between(x, y, 0.0, color="crimson", alpha=0.4)
+
+    dd = eq / eq.cummax() - 1.0
+    a2.plot(dd.index, dd.to_numpy(), color="crimson", lw=0.8)
+    a2.fill_between(dd.index, dd.to_numpy(), 0.0, color="crimson", alpha=0.4)
     a2.set_ylim(float(dd.min()) * 1.1, 0.01)
     a2.set_ylabel("Drawdown"); a2.grid(alpha=0.3)
+
     fig.tight_layout()
     if path:
         fig.savefig(path, dpi=120)
